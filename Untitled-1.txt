@@ -1,4 +1,0 @@
-let arr = [1,2,,,5]
-for(val in arr){
-    console.log(val)
-}
