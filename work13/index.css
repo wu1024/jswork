@@ -11,7 +11,7 @@ body {
 }
 
 .box-head {
-    padding: 5px;
+    padding: 5px 20px;
     background-color: #2487C9 ;
     color: #fff;
     font-size: 14px;
@@ -51,7 +51,7 @@ body {
 .box-body input {
     vertical-align: middle;
     font-family: Tahoma,simsun;
-    font-size: 2px;
+    font-size:12px;
 }
 
 .box-body input[type=text] {
