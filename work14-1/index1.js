@@ -35,7 +35,7 @@ lamp.changeStyle(now.style);
 count.change(timeout);
 setInterval(function(){
     if (--timeout <= 0) {
-        now = lamo[now.next];
+        now = lamp[now.next];
         timeout = now.timeout;
         lamp.changeStyle(now.style);
     }
