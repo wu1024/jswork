@@ -2,19 +2,15 @@ const express = require('express')
 
 const app = express()
 
-const bodyParset = require("body-parser")
+const bodyParser = require("body-parser")
 
 
 
 app.use(express.static('.'))
 
-app.use(bodyParset.json());
+app.use(bodyParser.json());
 
-app.use(bodyParset.urlencoded({ 
-
-  extended: false 
-
-}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
 
@@ -22,37 +18,41 @@ app.use(express.static('../uploads'))
 
 const multer = require('multer');
 
-var storage = multer.diskStorage({
+var storage = multer .diskStorage({
 
-    destination: function (req, file, cb) {
+  destination: function (req, file, cb) {
 
-        cb(null, '../uploads')
+    cb(null, '../uploads')
 
-    },
+  },
 
-    filename: function (req,file, cb) {
+filename:function (req, file, cb) {
 
-        var fileFormat = (file.originalname).split(".");
+         var fileFormat = (file.originalname).split(".");
 
-        cb(null, file.fieldname + '_' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
+         cb(null, file.fieldname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
 
-    }
+}
 
 });
 
-let upload = multer({ storage: storage })
+let upload = multer({ storage:storage})
 
 app.post('/upload',upload.single('file'),function(req,res,next){
 
-    var file=req.file;
+  var file =req.file;
 
-    console.log("original file name is "+file.originalname);
+  console.log("original file name is "+file.originalname);
 
-    console.log("file name is " + file.filename);
+  console.log("file name is "+ file.filename);
 
-    res.json('/'+file.filename);
+  res.json('/'+file.filename);
 
 })
+
+
+
+
 
 app.post('/formBuilder', function (req, res) {
 
@@ -60,15 +60,15 @@ app.post('/formBuilder', function (req, res) {
 
     res.send(req.body)
 
-})
+  })
 
 
 
-let ajaxData = []
+  let ajaxData = []
 
-let count = 0
+  let count = 0
 
-app.post('/ajax', function (req, res) {
+  app.post('/ajax', function(req,res){
 
     let sno = req.body.sno
 
@@ -78,15 +78,15 @@ app.post('/ajax', function (req, res) {
 
     let comment = {
 
-        id: count + 1,
+      id: count + 1,
 
-        sno: sno,
+      sno: sno,
 
-        user: name,
+      user:name,
 
-        time: new Date().toLocaleString(),
+      time: new Date().toLocaleString(),
 
-        content: content
+      content: content
 
     }
 
@@ -98,11 +98,11 @@ app.post('/ajax', function (req, res) {
 
     res.json(ajaxData)
 
-})
+  })
 
 
 
-app.get('/ajax', function (req, res) {
+  app.get('/ajax', function (req, res){
 
     let page = req.query.page?Math.max(req.query.page,1):1
 
@@ -112,41 +112,41 @@ app.get('/ajax', function (req, res) {
 
     result={data:ajaxData.slice((page-1)*size,page*size),
 
-    maxpage:maxpage
+      maxPage:maxpage
 
-}
+  }
 
-res.json(result)
+  res.json(result)
 
 })
 
-app.listen(8080, () =>console.log('node express 服务器已启动，监听端口：8080'))
+app.listen(8080, () => console.log('node express 服务器已启动，监听端口：8080'))
 
 
 
 const openDefaultBrowser = function (url) {
 
-    var exec = require('child_process').exec;
+  var exec = require('child_process').exec;
 
-    switch (process.platform) {
+  switch (process.platform) {
 
-        case "darwin":
+    case "darwin":
 
-            exec('open ' + url);
+      exec('open ' + url);
 
-            break;
+      break;
 
-        case "win32":
+    case "win32":
 
-            exec('start '+ url);
+      exec('start ' + url);
 
-            break;
+      break;
 
-        default:
+    default:
 
-            exec('xdg-open', [url]);
+      exec('xdg-open', [url]);
 
-    }
+  }
 
 }
 
@@ -156,47 +156,47 @@ openDefaultBrowser('http://localhost:8080')
 
 var ws = require("nodejs-websocket")
 
-let id=0
+let id = 0
 
 
 
 var server = ws.createServer(function (conn) {
 
-    id++
+  id++
 
-    conn.name = "p"+id
+  conn.name = "p"+id
 
-    broadcast(server,'有新人加入.')
+  broadcast(server,'有新人加入.')
 
-    conn.on("text", function (str) {
+  conn.on("text",function (str) {
 
-        if(str.slice(0,9)=='nickname|'){
+    if(str.slice(0,9)=='nickname|'){
 
-            conn.name=str.split('|')[1]
+      conn.name=str.split('|')[1]
 
-            broadcast(server,conn.name+'上线了。')
+      broadcast(server,conn.name+'上线啦！')
 
-         return
+      return
 
-		} 
+      
 
-          
+    }
 
-        broadcast(server,conn.name+':'+str)
+    broadcast(server,conn.name+':'+str)
 
-    })
+  })
 
-        conn.on('connect',function(){
+  conn.on('connect',function(){
 
-            conn.name = "name"
+    conn.name = "name"
 
-        })
+  })
 
-        conn.on("close", function (code, reason) {
+  conn.on("close",function (code, reason){
 
-            console.log("Connection closed")
+    console.log("Connection closed")
 
-        })
+  })
 
 }).listen(8081,()=>console.log('socket server listening on:8081'))
 
@@ -204,11 +204,12 @@ var server = ws.createServer(function (conn) {
 
 function broadcast(server, msg) {
 
-    server.connections.forEach(function (conn) {
+  server.connections.forEach(function (conn){
 
-        conn.sendText(msg)
+    conn.sendText(msg)
 
-    })
+  })
+
+    
 
 }
-
